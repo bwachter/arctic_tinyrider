@@ -18,9 +18,16 @@
 // the digital pin the servo is attached to
 #define SERVO_PIN 9
 
+// arduino can tolerate about 20µA per pin, with a total of 200µA
+// a bright 5mm LED draws roughly 20µA - so three sets of two LEDs
+// should be safe. If you need more connect them to power directly,
+// and trigger them via transistor
+
+// the power LEDs also serve as back lights
 #define POWER_LED 13
-#define LEFT_LED 12
-#define RIGHT_LED 11
+#define POWER_LEDS {2,13}
+#define FRONT_LEDS {11,12}
+#define EFFECT_LEDS {4,5}
 
 // this should be a three state switch, and needs to be setup as aux channel
 // comment this definition if you don't want that feature
@@ -29,6 +36,8 @@
 // a two state switch, preventing throttle to engage unless switched on
 // comment this definition if you don't want that feature
 #define IGNITION_CHANNEL 6
+
+#define EFFECT_CHANNEL 5
 
 /*
   This configures an input (default: VRA on channel 5) to adjust the speed
@@ -67,6 +76,7 @@ int led_state=0;
 int throttle_channel;
 int steering_channel;
 int failsafe_channel;
+int reverse_channel;
 
 void setup_controls(){
 #ifdef CONTROL_CHANNEL
@@ -79,16 +89,19 @@ void setup_controls(){
     throttle_channel=1;
     steering_channel=3;
     failsafe_channel=0;
+    reverse_channel=2;
   } else if (controls == 2000) {
     // throttle and steering right
     throttle_channel=1;
     steering_channel=0;
     failsafe_channel=3;
+    reverse_channel=2;
   } else {
     // default, throttle on the left, steering right
     throttle_channel=2;
     steering_channel=0;
     failsafe_channel=3;
+    reverse_channel=1;
   }
 }
 
