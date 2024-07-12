@@ -125,7 +125,10 @@ void loop() {
   steer = IBus.readChannel(steering_channel);
   Serial.print("Steer: ");
   Serial.print(steer);
-  steeringServo.writeMicroseconds(steer);
+  if (steer >= 1000 and steer <= 2000)
+    steeringServo.writeMicroseconds(steer);
+  else
+    steeringServo.writeMicroseconds(1500);
 
 #ifdef IGNITION_CHANNEL
   ignition = IBus.readChannel(IGNITION_CHANNEL);
