@@ -78,6 +78,16 @@ int steering_channel;
 int failsafe_channel;
 int reverse_channel;
 
+int power_leds[]=POWER_LEDS;
+int front_leds[]=FRONT_LEDS;
+int effect_leds[]=EFFECT_LEDS;
+
+enum led_effects{
+  led_on,
+  led_off,
+  led_cycle
+};
+
 void setup_controls(){
 #ifdef CONTROL_CHANNEL
   int controls = IBus.readChannel(CONTROL_CHANNEL);
@@ -102,6 +112,28 @@ void setup_controls(){
     steering_channel=0;
     failsafe_channel=3;
     reverse_channel=1;
+  }
+}
+
+void set_led(int leds[], int cycle, int effect){
+  switch(effect){
+    case led_on:
+      digitalWrite(leds[0], HIGH);
+      digitalWrite(leds[1], HIGH);
+      break;
+    case led_off:
+      digitalWrite(leds[0], LOW);
+      digitalWrite(leds[1], LOW);
+      break;
+    case led_cycle:
+      if (cycle < 0){
+        digitalWrite(leds[0], LOW);
+        digitalWrite(leds[1], LOW);
+      } else {
+        digitalWrite(leds[0], HIGH);
+        digitalWrite(leds[1], HIGH);
+      }
+      break;
   }
 }
 
@@ -134,13 +166,11 @@ void loop() {
   ignition = IBus.readChannel(IGNITION_CHANNEL);
   if (ignition != 2000){
     motor.write(0);
-    if (led_state < 0)
-      digitalWrite(POWER_LED, LOW);
-    else
-      digitalWrite(POWER_LED, HIGH);
+
+    set_led(power_leds, led_state, led_cycle);
   } else {
 #endif
-    digitalWrite(POWER_LED, HIGH);
+    set_led(power_leds, led_state, led_on);
     int throttle;
     throttle = IBus.readChannel(throttle_channel);
     Serial.print(" Throttle: ");
