@@ -51,8 +51,28 @@ You'll need one power and one ground bar to connect everything to. A cheap varia
 
 The three-pin connector from the ESC connects to power bar, ground bar, and pin D3 on the Arduino.
 
-The servo connects to power bar, ground bar, and pin D9 on the Arduino.
+The servo connects to power bar, ground bar, and pin D10 on the Arduino.
 
 Depending on your receiver you may have dedicated VCC/ground connectors, if not just connect power and ground from any channel to power/ground bars. Connect the iBus pin to the RX pin on the Arduino. Note that when flashing via USB this pin must be disconnected while flashing.
 
 On the Arduino connect ground and VIN to ground/power bars.
+
+The following table contains the basic setup. If you don't want to add any LEDs you can skip the link part, otherwise it is sensible to provide a ground pin to connect to a separate ground bar for additional LEDs. When using LEDs drawing more than 20µA or more than two for one effect they'll have to be switched via transistor and powered via the ESC, in which case it also makes sense to lead out a power bar:
+
+|          | GND | 5v | arduino |
+|----------+-----+----+---------|
+| ESC      | x   | x  | D3      |
+| receiver | x   | x  | RX      |
+| arduino  | x   | x  |         |
+| servo    | x   | x  | D10     |
+| link     | x   | x  |         |
+
+When adding LEDs the default pins are in this table. D13 is also the LED mounted on the Arduino, so if this one is visible no external LEDs are needed. If it is not visible at least one status-LED should be connected for safety - this LED signals throttle lock or error conditions. In a full LED setup the status LEDs should be used as rear lights.
+
+|        | Pin 1 | Pin 2 |
+|--------+-------+-------|
+| status | D13   | D2    |
+| front  | D11   | D12   |
+| effect | D4    | D5    |
+
+Pins are set up to minimise gaps, soldering three three-pin-headers will cover all pins on one side, while connecting the unused RST pin. On the other side just VIN and D13 need to be populated.

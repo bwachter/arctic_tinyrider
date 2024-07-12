@@ -12,11 +12,13 @@
  the native 0-255 of Arduino PWM (which is a wrong frequency).
 */
 
+//#define ESC_PWM_REVERSED 1
+
 // the digital pin the motor is attached to
 #define MOTOR_PIN 3
 
 // the digital pin the servo is attached to
-#define SERVO_PIN 9
+#define SERVO_PIN 10
 
 // arduino can tolerate about 20µA per pin, with a total of 200µA
 // a bright 5mm LED draws roughly 20µA - so three sets of two LEDs
